@@ -157,7 +157,7 @@ async def update_blocks():
             for block in new_blocks:
                 all_block.append(block)
 
-            print(f"In memory store last {len(all_block)} blocks -> {all_block}")
+            print(f"In memory store last {len(all_block)} blocks")
             # calc new average reward
             average_reward = get_average_reward(all_block)
 

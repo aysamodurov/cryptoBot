@@ -86,16 +86,22 @@ def update_pool_stat(blocks):
     """
     # read pool statistic from file out\pool_stat.json
     import json
-    with open('out\\pool_stat.json','r',encoding='utf-8') as json_file:
-        try:
-            counter_old = Counter(json.load(json_file))
-        except Exception as ex:
-            print(f'{ex}, file pool_stat.json is empty, create new pool statistic')
-            counter_old = Counter()
+    import os
+    # check exist folder out an file pool_stat.json
+    if not os.path.exists('out'):
+        os.mkdir('out')
+    if not os.path.exists('out\\pool_stat.json'):
+        counter_old = Counter()
+    else:
+        with open('out\\pool_stat.json', 'r', encoding='utf-8') as json_file:
+            try:
+                counter_old = Counter(json.load(json_file))
+            except Exception as ex:
+                print(f'{ex}, file pool_stat.json is empty, create new pool statistic')
+                counter_old = Counter()
 
     # get new pool shares
     counter = Counter([item['miner'] for item in blocks])
     counter = counter + counter_old
-    print(counter)
     with open('out\\pool_stat.json', 'w', encoding='utf-8') as json_file:
         json.dump(counter, json_file,indent=4,ensure_ascii=False)
