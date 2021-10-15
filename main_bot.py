@@ -1,7 +1,7 @@
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.dispatcher.filters import Text
 from config import TELEGRAM_TOKEN
-from last_eth_block import get_html, get_new_block_list, get_average_reward, print_popular_miner, get_best_miner
+from last_eth_block import get_html, get_new_block_list, get_average_reward, print_popular_miner, get_best_miner, update_pool_stat
 from crypto_market import get_current_btc_usd, get_current_eth_usd
 import json
 import asyncio
@@ -133,7 +133,7 @@ async def send_message_all_subscribers(text):
         await bot.send_message(subsc, text)
 
 
-async def check_anomal_block():
+async def update_blocks():
     # last  blocks
     ANOMAL_COEF = 1.8
     COUNT_BLOCK = 200
@@ -141,14 +141,18 @@ async def check_anomal_block():
     while True:
         # get last 100 blocks
         html = get_html('https://etherscan.io/blocks?ps=100')
+
         # get new blocks
-        min_id = all_block[0].get('id') if all_block else 0
+        min_id = all_block[-1].get('id') if all_block else 0
         new_blocks = get_new_block_list(html, min_id)
 
         # if new_block found
         if new_blocks:
             print(f"{time.strftime('%H:%M:%S %d-%m-%Y', time.gmtime())} Found {len(new_blocks)} new block. ID:",
                   [block_id['id'] for block_id in new_blocks])
+            # update poolstatistic
+            update_pool_stat(new_blocks)
+
             # update last found block
             for block in new_blocks:
                 all_block.append(block)
@@ -164,7 +168,7 @@ async def check_anomal_block():
                 if new_block['reward'] > average_reward * ANOMAL_COEF:
                     await send_message_all_subscribers(u'\U00002757\U00002757\U00002757'+f" Блок ID - {new_block['id']}, время {new_block['time']} "
                                                        f"имеет большое вознаграждение {new_block['reward']}, miner: {new_block['miner']}")
-        await asyncio.sleep(random.randint(30, 60))
+        await asyncio.sleep(random.randint(10, 20))
 
 
 # обновление списка подписчиков в файле json
@@ -175,5 +179,5 @@ def update_subscribers(subscribers):
 
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
-    loop.create_task(check_anomal_block())
+    loop.create_task(update_blocks())
     executor.start_polling(dp)

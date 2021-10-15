@@ -54,19 +54,13 @@ def get_new_block_list(html, min_id=0):
             }
             result.append(block)
         else:
-            return result
-    return result
+            return sorted(result,key=lambda k:k['id'])
+    return sorted(result,key=lambda k:k['id'])
 
 
 # average reward on the last 100 block
 def get_average_reward(blocks):
     return sum(block['reward'] for block in blocks)/len(blocks)
-
-
-# write last 100 block to json file
-def dump_file(blocks):
-    with open('blocks.json', 'w', encoding='utf-8') as file:
-        json.dump(blocks, file, indent=4, ensure_ascii=False)
 
 
 # get best pool(miner)
@@ -84,53 +78,24 @@ def print_popular_miner(blocks):
         for key, val in counter:
             file.write(f"{key}   :   {val}\n")
 
+def update_pool_stat(blocks):
+    """Update find share on pool
 
-def test():
-    # html = get_html('https://etherscan.io/blocks?ps=100')
-    # with open('index.html', 'w', encoding='utf-8') as file:
-    #     file.write(html)
-    with open('index.html', 'r', encoding='utf-8') as file:
-        html = file.read()
-    new_blocks = get_new_block_list(html)
-    with open('blocks.json', 'w', encoding='utf-8') as file:
-        json.dump(new_blocks, file, indent=4, ensure_ascii=False)
-    with open('blocks.json', 'r', encoding='utf-8') as file:
-        new_blocks = json.load(file)[0:200]
-    print(len(new_blocks))
+    :param block: list of new ETH block
+    :return:
+    """
+    # read pool statistic from file out\pool_stat.json
+    import json
+    with open('out\\pool_stat.json','r',encoding='utf-8') as json_file:
+        try:
+            counter_old = Counter(json.load(json_file))
+        except Exception as ex:
+            print(f'{ex}, file pool_stat.json is empty, create new pool statistic')
+            counter_old = Counter()
 
-
-def main():
-    # last 100 blocks
-    all_block = []
-
-    while True:
-        # get last 100 blocks
-        html = get_html('https://etherscan.io/blocks?ps=100')
-        # get new blocks
-        min_id = all_block[0].get('id') if all_block else 0
-        new_blocks = get_new_block_list(html, min_id)
-
-        # if new_block found
-        if new_blocks:
-            print(f"{time.strftime('%H:%M:%S %d-%m-%Y', time.gmtime())} Found {len(new_blocks)} new block. ID:",
-                  [block_id['id'] for block_id in new_blocks])
-            all_block.extend(new_blocks)
-            all_block.sort(key=lambda x: x['id'], reverse=True)
-            all_block = all_block[:100]
-            # save in file
-            dump_file(all_block)
-            # calc new average reward
-            average_reward = get_average_reward(all_block)
-
-            for new_block in new_blocks:
-                if new_block['reward'] > average_reward * MAX_COEF:
-                    print(f"Block with big reward {new_block}")
-
-            print_popular_miner(all_block)
-
-        time.sleep(random.randint(30, 60))
-
-
-if __name__ == '__main__':
-    # test()
-    main()
+    # get new pool shares
+    counter = Counter([item['miner'] for item in blocks])
+    counter = counter + counter_old
+    print(counter)
+    with open('out\\pool_stat.json', 'w', encoding='utf-8') as json_file:
+        json.dump(counter, json_file,indent=4,ensure_ascii=False)

@@ -1,17 +1,25 @@
 MINER   :   COUNT SHARE
-Ethermine   :   72
-F2Pool Old   :   42
-Hiveon Pool   :   18
-0xc365c3315cf926351ccaf13fa7d19c8c4058c8e1   :   15
-Nanopool   :   15
-Miner: 0xb7e...707   :   14
-MiningPoolHub   :   5
-2Miners: PPLNS   :   4
-KuCoin Pool   :   4
-BeePool   :   3
-BTC.com Pool   :   2
-0x2a20380dca5bc24d052acfbf79ba23e988ad0050   :   2
-0xbcc817f057950b0df41206c5d7125e6225cae18e   :   1
-Flexpool.io   :   1
+F2Pool Old   :   31
+Ethermine   :   25
+Hiveon Pool   :   11
+Nanopool   :   5
+0xab3b229eb4bcff881275e7ea2f0fd24eeac8c83a   :   4
+2Miners: PPLNS   :   3
+0x6ebaf477f83e055589c1188bcc6ddccd8c9b131a   :   2
+0xbcc817f057950b0df41206c5d7125e6225cae18e   :   2
+MiningPoolHub   :   2
+Miner: 0xb7e...707   :   2
+Flexpool.io   :   2
+0x21479eb8cb1a27861c902f07a952b72b10fd53ef   :   1
+Crazy Pool   :   1
 0x03e75d7dd38cce2e20ffee35ec914c57780a8e29   :   1
-0x776bb566dc299c9e722773d2a04b401e831a6dc8   :   1
+0x8f03f1a3f10c05e7cccf75c1fd10168e06659be7   :   1
+0xb1af7a686ff31ab089de7940d345eae3c3350de0   :   1
+KuCoin Pool   :   1
+0x2a20380dca5bc24d052acfbf79ba23e988ad0050   :   1
+EzilPool 2   :   1
+0x8c663fa4e91348c4c042e0ca0bc4145b5c9ee040   :   1
+2Miners: SOLO   :   1
+0x2daa35962a6d43eb54c48367b33d0b379c930e5e   :   1
+xnpool   :   1
+Miner: 0x070...287   :   1
